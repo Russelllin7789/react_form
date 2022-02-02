@@ -8,6 +8,12 @@ const SimpleInput = (props) => {
   // name input was truly invalid when the input content was invalid and the input was touched
   const nameInputIsInvalid = !nameIsValid && nameIsTouched
 
+  let formIsValid = false
+
+  if (nameIsValid) {
+    formIsValid = true
+  }
+
   const nameInputHandler = (event) => {
     setName(event.target.value)
   }
@@ -46,7 +52,7 @@ const SimpleInput = (props) => {
         {nameInputIsInvalid && <p className='error-text'>Name must not be empty.</p>}
       </div>
       <div className="form-actions">
-        <button>Submit</button>
+        <button disabled={!formIsValid}>Submit</button>
       </div>
     </form>
   );
