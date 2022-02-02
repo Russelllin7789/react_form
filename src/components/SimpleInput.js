@@ -1,49 +1,35 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 const SimpleInput = (props) => {
   const [name, setName] = useState('')
-  const [nameIsValid, setNameIsValid] = useState(false)
   const [nameIsTouched, setNameIsTouched] = useState(false)
 
-  useEffect(() => {
-    if (nameIsValid) {
-      console.log('name input is valid.')
-    }
-  }, [nameIsValid])
+  const nameIsValid = name.trim().length !== 0
+  // name input was truly invalid when the input content was invalid and the input was touched
+  const nameInputIsInvalid = !nameIsValid && nameIsTouched
 
   const nameInputHandler = (event) => {
     setName(event.target.value)
-
-    if (event.target.value.trim().length > 0) {
-      setNameIsValid(true)
-    }
   }
 
   const nameInputBlurHandler = (event) => {
     // because input could never be blured without focused first
     setNameIsTouched(true)
-
-    if (name.trim().length < 1) {
-      setNameIsValid(false)
-    }
   }
 
   const formSubmitHandler = (event) => {
     event.preventDefault()
     setNameIsTouched(true)
 
-    if (name.trim().length < 1) {
-      setNameIsValid(false)
+    if (!nameIsValid) {
       return
     }
 
-    setNameIsValid(true)
     console.log('user name:', name)
     setName('')
+    setNameIsTouched(false)
   }
 
-  // name input was truly invalid when the input content was invalid and the input was touched
-  const nameInputIsInvalid = !nameIsValid && nameIsTouched
   const nameInputClasses = nameInputIsInvalid ? 'form-control invalid' : 'form-control'
 
   return (
