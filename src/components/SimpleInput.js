@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import useInput from '../hooks/use-input';
 
 const SimpleInput = (props) => {
@@ -12,16 +11,14 @@ const SimpleInput = (props) => {
     reset: resetName
   } = useInput(value => value.trim().length !== 0)
 
-  // const [name, setName] = useState('')
-  // const [nameIsTouched, setNameIsTouched] = useState(false)
-  const [email, setEmail] = useState('')
-  const [emailIsTouched, setEmailIsTouched] = useState(false)
-
-  // const nameIsValid = name.trim().length !== 0
-  const emailIsValid = email.trim().length !== 0 && email.includes('@')
-  // name input was truly invalid when the input content was invalid and the input was touched
-  // const nameInputIsInvalid = !nameIsValid && nameIsTouched
-  const emailInputIsInvalid = !emailIsValid && emailIsTouched
+  const {
+    value: email,
+    hasError: emailInputIsInvalid,
+    isValueValid: emailIsValid,
+    inputValueHandler: emailInputHandler,
+    inputBlurHandler: emailInputBlurHandler,
+    reset: resetEmail
+  } = useInput(value => value.trim().length !== 0 && value.includes('@'))
 
   let formIsValid = false
 
@@ -29,27 +26,8 @@ const SimpleInput = (props) => {
     formIsValid = true
   }
 
-  // const nameInputHandler = (event) => {
-  //   setName(event.target.value)
-  // }
-
-  const emailInputHandler = (event) => {
-    setEmail(event.target.value)
-  }
-
-  // const nameInputBlurHandler = (event) => {
-  //   // because input could never be blured without focused first
-  //   setNameIsTouched(true)
-  // }
-
-  const emailInputBlurHandler = (event) => {
-    // because input could never be blured without focused first
-    setEmailIsTouched(true)
-  }
-
   const formSubmitHandler = (event) => {
     event.preventDefault()
-    // setNameIsTouched(true)
 
     if (!nameIsValid || !emailIsValid) {
       return
@@ -57,8 +35,7 @@ const SimpleInput = (props) => {
 
     console.log('user name:', name, 'user email:', email)
     resetName()
-    setEmail('')
-    setEmailIsTouched(false)
+    resetEmail()
   }
 
   const nameInputClasses = nameInputIsInvalid ? 'form-control invalid' : 'form-control'
