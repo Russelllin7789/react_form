@@ -13,6 +13,19 @@ const SimpleInput = (props) => {
 
   const nameInputHandler = (event) => {
     setName(event.target.value)
+
+    if (event.target.value.trim().length > 0) {
+      setNameIsValid(true)
+    }
+  }
+
+  const nameInputBlurHandler = (event) => {
+    // because input could never be blured without focused first
+    setNameIsTouched(true)
+
+    if (name.trim().length < 1) {
+      setNameIsValid(false)
+    }
   }
 
   const formSubmitHandler = (event) => {
@@ -37,7 +50,13 @@ const SimpleInput = (props) => {
     <form onSubmit={formSubmitHandler}>
       <div className={nameInputClasses}>
         <label htmlFor='name'>Your Name</label>
-        <input type='text' id='name' onChange={nameInputHandler} value={name} />
+        <input
+          type='text'
+          id='name'
+          onChange={nameInputHandler}
+          onBlur={nameInputBlurHandler}
+          value={name}
+        />
         {nameInputIsInvalid && <p className='error-text'>Name must not be empty.</p>}
       </div>
       <div className="form-actions">
